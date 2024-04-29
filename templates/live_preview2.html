@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>User Location</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        /* Set the size of the div element that will contain the map */
+        #map {
+            /* These will be set dynamically */
+            width: 0;
+            height: 0;
+        }
+    </style>
+</head>
+<body>
+    <h3>My Map Demo</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5CXAVU8ekdknnmANgS8ddBBqqYr_lmKc&callback=initMap"></script>
+    
+    <script>
+        // The URL of your georeferenced image
+        var imageUrl = '/static/Ground_Floor.jpg';
+
+        // Create a new image object
+        var img = new Image();
+
+        // Once the image has loaded, adjust the size of the map container
+        img.onload = function() {
+            document.getElementById('map').style.width = this.width + 'px';
+            document.getElementById('map').style.height = this.height + 'px';
+
+            // The bounds of your image (southwest and northeast corners)
+            var imageBounds = [[10.156198822,76.282620304,],[10.157959005,76.281164333]];
+
+            // Initialize the map
+            var map = L.map('map').fitBounds(imageBounds);
+
+            // Add the image to the map
+            L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
+            // Function to update markers
+            function updateMarkers() {
+                // Clear existing markers
+                map.eachLayer(function (layer) {
+                    if (layer instanceof L.Marker) {
+                        map.removeLayer(layer);
+                    }
+                });
+
+                // Loop over the data_list and add a marker for each location
+                {% for data in data_list %}
+                    var userLocation = [{{ data.location.latitude }}, {{ data.location.longitude }}];
+                    L.marker(userLocation).addTo(map);
+                {% endfor %}
+            }
+
+            // Initial update of markers
+            updateMarkers();
+
+            // Update markers every 2 seconds
+            setInterval(updateMarkers, 2000);
+        };
+
+        // Start loading the image
+        img.src = imageUrl;
+    </script>
+</body>
+</html>

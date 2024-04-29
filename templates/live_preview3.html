@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Leaflet Map Example</title>
+    <!-- Include Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Include Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <style>
+        /* Set the size of the map container */
+        html, body, #map {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- The div element for the map -->
+    <div id="map"></div>
+
+    <script>
+        // The URL of your georeferenced image
+        var imageUrl = '/static/Ground_Floor.jpg';
+
+        // Create a new image object
+        var img = new Image();
+
+        // Once the image has loaded, adjust the size of the map container
+        img.onload = function() {
+            document.getElementById('map').style.width = this.width + 'px';
+            document.getElementById('map').style.height = this.height + 'px';
+
+            // The bounds of your image (southwest and northeast corners)
+            var imageBounds = [[10.156198822,76.282620304],[10.157959005,76.281164333]];
+
+            // Initialize the map
+            var map = L.map('map').fitBounds(imageBounds, { maxZoom: 19 });
+
+            // Add a tile layer from OpenStreetMap
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            // Add the image to the map as an overlay
+            L.imageOverlay(imageUrl, imageBounds).addTo(map);
+
+            // Function to update markers
+            function updateMarkers() {
+               // Log the update
+                // Loop over the data_list and add a marker for each location
+                {% for data in data_list %}
+                    var userLocation = [{{ data.location.latitude }}, {{ data.location.longitude }}];
+                    L.marker(userLocation).addTo(map);
+                           {% endfor %}
+            }
+
+            // Update markers every 2 seconds
+            setInterval(updateMarkers, 2000);
+        };
+
+        // Start loading the image
+        img.src = imageUrl;
+    </script>
+</body>
+</html>

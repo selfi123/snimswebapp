@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit User</title>
+</head>
+<body>
+    <h1>Edit User</h1>
+    <form action="/edit_user/{{ user.uid }}" method="POST">
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" value="{{ user.email }}"><br><br>
+        <label for="phone_number">Phone Number:</label><br>
+        <input type="text" id="phone_number" name="phone_number" value="{{ user.phone_number }}"><br><br>
+        <label for="email_verified">Email Verified:</label>
+        <select id="email_verified" name="email_verified">
+            <option value="True" {% if user.email_verified %} selected {% endif %}>True</option>
+            <option value="False" {% if not user.email_verified %} selected {% endif %}>False</option>
+        </select><br><br>
+        <label for="disabled">Disabled:</label>
+        <select id="disabled" name="disabled">
+            <option value="True" {% if user.disabled %} selected {% endif %}>True</option>
+            <option value="False" {% if not user.disabled %} selected {% endif %}>False</option>
+        </select><br><br>
+        <input type="submit" value="Update">
+    </form>
+</body>
+</html>

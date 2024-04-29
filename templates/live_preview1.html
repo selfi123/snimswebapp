@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google Maps Example</title>
+    <!-- Include Google Maps JavaScript API script with your API key -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA5CXAVU8ekdknnmANgS8ddBBqqYr_lmKc&callback=initMap" async defer></script>
+    <style>
+        /* Set the size of the map container */
+        #map {
+            width: 800px; /* Adjust width as needed */
+            height: 600px; /* Adjust height as needed */
+        }
+    </style>
+</head>
+<body>
+    <h3>Google Maps Example</h3>
+    <!-- The div element for the map -->
+    <div id="map"></div>
+
+    <script>
+        // Initialize the map
+        function initMap() {
+            // Specify initial map options (center and zoom level)
+            var mapOptions = {
+                center: { lat: 40.7128, lng: -74.0060 }, // New York City coordinates
+                zoom: 12 // Zoom level (0 = whole world, higher values zoom in)
+            };
+
+            // Create a new map instance in the specified container
+            var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+        }
+    </script>
+</body>
+</html>
