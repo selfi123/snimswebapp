@@ -303,7 +303,7 @@ def response1(description):
     return response
 
 
-cred = credentials.Certificate("D:/programs/selfi123.github.io/firebase/flutter-hosmngment-firebase-adminsdk-dj8hb-40853f1068.json")
+cred = credentials.Certificate("firebase/flutter-hosmngment-firebase-adminsdk-dj8hb-40853f1068.json")
 firebase_admin.initialize_app(cred)
 db = firestore.client()
 
