@@ -1,0 +1,9 @@
+flask
+flask_session
+g4f
+python.nmap
+openai
+mysql.connector
+scapy
+firebase_admin
+datetime
