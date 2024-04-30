@@ -405,34 +405,36 @@ def get_new_location_data():
         data_list.append(data)
     return jsonify(data_list)
 
-users = [
-    {"id": 1, "name": "User 1", "device_token": "DEVICE_TOKEN_1"},
-    {"id": 2, "name": "User 2", "device_token": "DEVICE_TOKEN_2"},
-    # Add more users here...
-]
+
 
 @app.route('/message_user/<user_id>')
 def message_user(user_id):
     return render_template('message_user.html', user_id=user_id)
 
-# Endpoint for sending messages to individual users
-@app.route('/send_message/<user_id>', methods=['POST'])
-def send_message(user_id):
-    message = request.form.get('message')
+@app.route('/send_message/<user_uid>', methods=['POST'])
+def send_message(user_uid):
+    custom_token = auth.create_custom_token(user_uid)
 
-    # Find the user by ID
-    user = next((user for user in users if user['id'] == (user_id)), None)
-    if user:
-        # Send the message to the user
-        send_message_to_user(user['device_token'], message)
-        return "Message sent successfully to user: " + user['name']
+    if custom_token:
+        message = messaging.Message(
+            data={
+                'title': 'Notification Title',
+                'message': 'Notification Message'
+            },
+            token=custom_token
+        )
+        response = messaging.send(message)
+        return jsonify({'message_id': response})
     else:
-        return "User not found"
+        return jsonify({'error': 'Invalid token'}), 400
+
+
 
 # Endpoint for broadcasting messages to all users
 @app.route('/broadcast_message', methods=['POST'])
 def broadcast_message():
     message = request.form.get('message')
+    users = auth.lisst_users()
 
     # Send the message to all users
     for user in users:
